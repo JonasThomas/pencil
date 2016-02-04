@@ -36,7 +36,7 @@ void ToolOptionWidget::updateUI()
     mFeatherSlider->setVisible( currentTool->isPropertyEnabled( FEATHER ) );
     mUseFeatherBox->setVisible( currentTool->isPropertyEnabled( FEATHER ) );
     mFeatherSpinBox->setVisible( currentTool->isPropertyEnabled( FEATHER) );
-    mUseBezierBox->setVisible( currentTool->isPropertyEnabled( BEZIER ) );
+    mUseBezierBox->setVisible( currentTool->isPropertyEnabled( TP_BEZIER ) );
     mUsePressureBox->setVisible( currentTool->isPropertyEnabled( PRESSURE ) );
     mMakeInvisibleBox->setVisible( currentTool->isPropertyEnabled( INVISIBILITY ) );
     mPreserveAlphaBox->setVisible( currentTool->isPropertyEnabled( PRESERVEALPHA ) );

@@ -24,7 +24,7 @@ QString BaseTool::TypeName( ToolType type )
         map->insert( HAND, "Hand" );
         map->insert( SMUDGE, "Smudge" );
         map->insert( PEN, "Pen" );
-        map->insert( POLYLINE, "Polyline" );
+        map->insert( TT_POLYLINE, "Polyline" );
         map->insert( BUCKET, "Bucket" );
         map->insert( EYEDROPPER, "Eyedropper" );
         map->insert( BRUSH, "Brush" );
@@ -40,7 +40,7 @@ BaseTool::BaseTool( QObject *parent ) : QObject( parent )
     m_enabledProperties.insert( PRESSURE,       false  );
     m_enabledProperties.insert( INVISIBILITY,   false  );
     m_enabledProperties.insert( PRESERVEALPHA,  false  );
-    m_enabledProperties.insert( BEZIER,         false  );
+    m_enabledProperties.insert( TP_BEZIER,         false  );
 }
 
 QCursor BaseTool::cursor()

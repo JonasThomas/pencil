@@ -31,7 +31,7 @@ bool ToolManager::init()
     mToolSetHash.insert( EYEDROPPER, new EyedropperTool );
     mToolSetHash.insert( HAND, new HandTool );
     mToolSetHash.insert( MOVE, new MoveTool );
-    mToolSetHash.insert( POLYLINE, new PolylineTool );
+    mToolSetHash.insert( TT_POLYLINE, new PolylineTool );
     mToolSetHash.insert( SELECT, new SelectTool );
     mToolSetHash.insert( SMUDGE, new SmudgeTool );
 
@@ -89,7 +89,7 @@ void ToolManager::resetAllTools()
     // Betatesters should be recommended to reset before sending tool related issues.
     // This can prevent from users to stop working on their project.
     getTool( PEN )->properties.width = 1.5; // not supposed to use feather
-    getTool( POLYLINE )->properties.width = 1.5; // PEN dependent
+    getTool( TT_POLYLINE )->properties.width = 1.5; // PEN dependent
     getTool( PENCIL )->properties.width = 1.0;
     getTool( PENCIL )->properties.feather = -1.0; // locks feather usage (can be changed)
     getTool( ERASER )->properties.width = 25.0;
@@ -149,7 +149,7 @@ void ToolManager::setPreserveAlpha( bool isPreserveAlpha )
 void ToolManager::setBezier( bool isBezierOn )
 {
     currentTool()->setBezier( isBezierOn );
-    Q_EMIT toolPropertyChanged( currentTool()->type(), BEZIER );
+    Q_EMIT toolPropertyChanged( currentTool()->type(), TP_BEZIER );
 }
 
 void ToolManager::setPressure( bool isPressureOn )

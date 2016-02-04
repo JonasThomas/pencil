@@ -202,7 +202,7 @@ void ToolBoxWidget::handOn()
 
 void ToolBoxWidget::polylineOn()
 {
-    editor()->tools()->setCurrentTool( POLYLINE );
+    editor()->tools()->setCurrentTool( TT_POLYLINE );
 
     deselectAllTools();
     polylineButton->setChecked(true);
@@ -280,7 +280,7 @@ void ToolBoxWidget::setCurrentTool( ToolType toolType )
     case PEN:
         emit penOn();
         break;
-    case POLYLINE:
+    case TT_POLYLINE:
         emit polylineOn();
         break;
     case BUCKET:

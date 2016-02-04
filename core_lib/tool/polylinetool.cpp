@@ -17,13 +17,13 @@ BaseTool( parent )
 
 ToolType PolylineTool::type()
 {
-    return POLYLINE;
+    return TT_POLYLINE;
 }
 
 void PolylineTool::loadSettings()
 {
     m_enabledProperties[WIDTH] = true;
-    m_enabledProperties[BEZIER] = true;
+    m_enabledProperties[TP_BEZIER] = true;
 
     QSettings settings( "Pencil", "Pencil" );
 

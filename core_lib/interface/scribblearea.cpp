@@ -1141,7 +1141,7 @@ void ScribbleArea::drawPolyline( QList<QPointF> points, QPointF endPoint )
     if ( points.size() > 0 )
     {
         QPen pen2( mEditor->color()->frontColor(),
-                   getTool( POLYLINE )->properties.width,
+                   getTool( TT_POLYLINE )->properties.width,
                    Qt::SolidLine,
                    Qt::RoundCap,
                    Qt::RoundJoin );
@@ -1167,7 +1167,7 @@ void ScribbleArea::drawPolyline( QList<QPointF> points, QPointF endPoint )
             }
             else
             {
-                pen2.setWidth( getTool( POLYLINE )->properties.width * mEditor->view()->scaling() );
+                pen2.setWidth( getTool( TT_POLYLINE )->properties.width * mEditor->view()->scaling() );
             }
         }
         mBufferImg->clear();
@@ -1195,7 +1195,7 @@ void ScribbleArea::endPolyline( QList<QPointF> points )
         }
         else
         {
-            curve.setWidth( getTool( POLYLINE )->properties.width );
+            curve.setWidth( getTool( TT_POLYLINE )->properties.width );
         }
         curve.setColourNumber( mEditor->color()->frontColorNumber() );
         curve.setVariableWidth( false );
@@ -1595,7 +1595,7 @@ void ScribbleArea::setCurrentTool( ToolType eToolMode )
             paintTransformedSelection();
             deselectAll();
         }
-        else if ( currentTool()->type() == POLYLINE )
+        else if ( currentTool()->type() == TT_POLYLINE )
         {
             escape();
         }

@@ -21,7 +21,8 @@ enum ToolType
     HAND,
     SMUDGE,
     PEN,
-    POLYLINE,
+    TT_POLYLINE,
+    TT_BEZIER,
     BUCKET,
     EYEDROPPER,
     BRUSH
@@ -34,7 +35,8 @@ enum ToolPropertyType
     PRESSURE,
     INVISIBILITY,
     PRESERVEALPHA,
-    BEZIER,
+    TP_POLYLINE,
+    TP_BEZIER,
     USEFEATHER
 };
 
