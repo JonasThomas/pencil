@@ -305,10 +305,17 @@ void BaseTool::setInvisibility( const bool invisibility )
     properties.invisibility = invisibility;
 }
 
-void BaseTool::setBezier( const bool _bezier_state )
+void BaseTool::setBezier( const bool bezier_state )
 {
-    properties.bezier_state = _bezier_state;
+    properties.bezier_state = bezier_state;
 }
+
+void BaseTool::setPolyline( const bool polyline_state )
+{
+    properties.polyline_state = polyline_state;
+}
+
+
 
 void BaseTool::setPressure( const bool pressure )
 {

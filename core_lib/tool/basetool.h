@@ -24,6 +24,8 @@ public:
     int pressure      = 1;
     int invisibility  = 0;
     int preserveAlpha = 0;
+    bool p_state = false;
+    bool polyline_state =false;
     bool bezier_state = false;
     bool useFeather   = true;
 };
@@ -77,6 +79,7 @@ public:
     virtual void setFeather( const qreal feather );
     virtual void setInvisibility( const bool invisibility );
     virtual void setBezier( const bool bezier_state );
+    virtual void setPolyline( const bool polyline_state );
     virtual void setPressure( const bool pressure );
     virtual void setUseFeather( const bool usingFeather );
     virtual void setPreserveAlpha( const bool preserveAlpha );

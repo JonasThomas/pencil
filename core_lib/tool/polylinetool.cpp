@@ -23,7 +23,7 @@ ToolType PolylineTool::type()
 void PolylineTool::loadSettings()
 {
     m_enabledProperties[WIDTH] = true;
-    m_enabledProperties[TP_BEZIER] = true;
+    m_enabledProperties[TP_POLYLINE] = true;
 
     QSettings settings( "Pencil", "Pencil" );
 
