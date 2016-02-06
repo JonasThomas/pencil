@@ -18,14 +18,14 @@ GNU General Public License for more details.
 
 #include <QtXml>
 #include <QPainter>
-
+#include "polyline.h"//Intersection is defline in polyline.
 class Object;
 
-struct Intersection
-{
-    QPointF point;
-    qreal t1, t2;
-};
+//struct Intersection
+//{
+//    QPointF point;
+//    qreal t1, t2;
+//};
 
 class BezierCurve
 {

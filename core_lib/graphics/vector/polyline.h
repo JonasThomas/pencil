@@ -29,8 +29,8 @@ public:
     int getVertexSize() const { return vertex.size(); }
     QPointF getOrigin() const {	return origin; }
     QPointF getVertex(int i) const { if (i==-1) { return origin; } else { return vertex.at(i);} }
-    QPointF getC1(int i) const { return c1.at(i); }
-    QPointF getC2(int i) const { return c2.at(i); }
+   //QPointF getC1(int i) const { return c1.at(i); }
+   // QPointF getC2(int i) const { return c2.at(i); }
     qreal getPressure(int i) const { return pressure.at(i); }
     bool isSelected(int i) const { return selected.at(i+1); }
     bool isSelected() const { bool result=true; for(int i=0; i<selected.size(); i++) result = result && selected[i]; return result; }
@@ -41,8 +41,8 @@ public:
 
     void setOrigin(const QPointF& point);
     void setOrigin(const QPointF& point, const qreal& pressureValue, const bool& trueOrFalse);
-    void setC1(int i, const QPointF& point);
-    void setC2(int i, const QPointF& point);
+   // void setC1(int i, const QPointF& point);
+  //  void setC2(int i, const QPointF& point);
     void setVertex(int i, const QPointF& point);
     void setLastVertex(const QPointF& point);
     void setWidth(qreal desiredWidth);
@@ -56,20 +56,21 @@ public:
     PolyLine transformed(QTransform transformation);
     void transform(QTransform transformation);
 
-    void appendCubic(const QPointF& c1Point, const QPointF& c2Point, const QPointF& vertexPoint, qreal pressureValue);
+    //void appendCubic(const QPointF& c1Point, const QPointF& c2Point, const QPointF& vertexPoint, qreal pressureValue);
     void addPoint(int position, const QPointF point);
     void addPoint(int position, const qreal t);
-    QPointF getPointOnCubic(int i, qreal t);
+    //QPointF getPointOnCubic(int i, qreal t);
     void removeVertex(int i);
     QPainterPath getStraightPath();
-    QPainterPath getSimplePath();
-    QPainterPath getStrokedPath();
-    QPainterPath getStrokedPath(qreal width);
-    QPainterPath getStrokedPath(qreal width, bool pressure);
-    QRectF getBoundingRect();
+    QPainterPath getPath();
+//    QPainterPath getStrokedPath();
+//    QPainterPath getStrokedPath(qreal width);
+//    QPainterPath getStrokedPath(qreal width, bool pressure);
+//    QRectF getBoundingRect();
 
-    void drawPath(QPainter& painter, Object* object, QTransform transformation, bool simplified, bool showThinLines );
-    void createCurve(QList<QPointF>& pointList, QList<qreal>& pressureList );
+    QPainterPath drawPath();
+    //void drawPath(QPainter& painter, Object* object, QTransform transformation, bool simplified, bool showThinLines );
+    void createPolyline(QList<QPointF>& pointList, QList<qreal>& pressureList );
     void smoothCurve();
 
     static void simplify(double tol, QList<QPointF>& inputList, int j, int k, QList<bool>& markList);
@@ -83,8 +84,8 @@ public:
 
 private:
     QPointF origin;
-    QList<QPointF> c1;
-    QList<QPointF> c2;
+//    QList<QPointF> c1;
+//    QList<QPointF> c2;
     QList<QPointF> vertex;
     QList<float> pressure; // this list has one more element than the other list (the first element is for the origin)
     int colourNumber;

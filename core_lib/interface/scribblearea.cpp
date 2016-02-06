@@ -21,7 +21,8 @@ GNU General Public License for more details.
 #include <QMessageBox>
 #include <QPixmapCache>
 
-#include "beziercurve.h"
+//#include "beziercurve.h"
+#include "polyline.h"
 #include "object.h"
 #include "editor.h"
 #include "layerbitmap.h"
@@ -1146,14 +1147,14 @@ void ScribbleArea::drawPolyline( QList<QPointF> points, QPointF endPoint )
                    Qt::RoundCap,
                    Qt::RoundJoin );
         QPainterPath tempPath;
-        if ( currentTool()->properties.bezier_state )
+        if ( currentTool()->properties.polyline_state)
         {
-            tempPath = BezierCurve( points ).getSimplePath();
+            tempPath = PolyLine( points ).drawPath();
         }
-        else
-        {
-            tempPath = BezierCurve( points ).getStraightPath();
-        }
+//        else
+//        {
+//            tempPath = PolyLine( points ).getStraightPath();
+//        }
         tempPath.lineTo( endPoint );
 
         QRectF updateRect = mEditor->view()->mapCanvasToScreen( tempPath.boundingRect().toRect() ).adjusted( -10, -10, 10, 10 );
