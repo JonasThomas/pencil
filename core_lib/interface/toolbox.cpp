@@ -42,7 +42,7 @@ ToolBoxWidget::ToolBoxWidget(const QString title, QWidget* pParent ) :
     handButton = newToolButton( QIcon( ":icons/hand.png" ), tr( "Hand Tool <b>(H)</b>: Move the canvas" ) );
     penButton = newToolButton( QIcon( ":icons/pen.png" ), tr( "Pen Tool <b>(P)</b>: Sketch with pen" ) );
     eraserButton = newToolButton( QIcon( ":icons/eraser.png" ), tr( "Eraser Tool <b>(E)</b>: Erase" ) );
-    polylineButton = newToolButton( QIcon( ":icons/polyline.png" ), tr( "Polyline Tool <b>(Y)</b>: Create line/curves" ) );
+    polylineButton = newToolButton( QIcon( ":icons/polyline.png" ), tr( "Polyline Tool <b>(Y)</b>: Create line" ) );
     bucketButton = newToolButton( QIcon( ":icons/bucket.png" ), tr( "Paint Bucket Tool <b>(K)</b>: Fill selected area with a color" ) );
     colouringButton = newToolButton( QIcon( ":icons/brush.png" ), tr( "Brush Tool <b>(B)</b>: Paint smooth stroke with a brush" ) );
     eyedropperButton = newToolButton( QIcon( ":icons/eyedropper.png" ), tr( "Eyedropper Tool <b>(I)</b>: Set color from the stage<br><b>[ALT]</b> for instant access" ) );

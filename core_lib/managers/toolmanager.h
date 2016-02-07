@@ -43,6 +43,7 @@ public slots:
     void setInvisibility( bool );
     void setPreserveAlpha( bool );
     void setBezier( bool );
+    void setPolyline(bool);
     void setPressure( bool );
 
 private:

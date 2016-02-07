@@ -36,7 +36,8 @@ void ToolOptionWidget::updateUI()
     mFeatherSlider->setVisible( currentTool->isPropertyEnabled( FEATHER ) );
     mUseFeatherBox->setVisible( currentTool->isPropertyEnabled( FEATHER ) );
     mFeatherSpinBox->setVisible( currentTool->isPropertyEnabled( FEATHER) );
-    mUseBezierBox->setVisible( currentTool->isPropertyEnabled( TP_BEZIER ) );
+    //mUseBezierBox->setVisible( currentTool->isPropertyEnabled( TP_BEZIER ) );
+    mUsePolylineBox->setVisible( currentTool->isPropertyEnabled( TP_POLYLINE) );
     mUsePressureBox->setVisible( currentTool->isPropertyEnabled( PRESSURE ) );
     mMakeInvisibleBox->setVisible( currentTool->isPropertyEnabled( INVISIBILITY ) );
     mPreserveAlphaBox->setVisible( currentTool->isPropertyEnabled( PRESERVEALPHA ) );
@@ -82,10 +83,16 @@ void ToolOptionWidget::createUI()
     mUseFeatherBox->setFont( QFont( "Helvetica", 10 ) );
     mUseFeatherBox->setChecked( settings.value( "brushUseFeather" ).toBool() );
 
-    mUseBezierBox = new QCheckBox( tr( "Bezier" ) );
-    mUseBezierBox->setToolTip( tr( "Bezier curve fitting" ) );
-    mUseBezierBox->setFont( QFont( "Helvetica", 10 ) );
-    mUseBezierBox->setChecked( false );
+//    mUseBezierBox = new QCheckBox( tr( "Bezier" ) );
+//    mUseBezierBox->setToolTip( tr( "Bezier curve fitting" ) );
+//    mUseBezierBox->setFont( QFont( "Helvetica", 10 ) );
+//    mUseBezierBox->setChecked( false );
+
+    mUsePolylineBox = new QCheckBox( tr( "Polyline" ) );
+    mUsePolylineBox->setToolTip( tr( "Polyline Drawing" ) );
+    mUsePolylineBox->setFont( QFont( "Helvetica", 10 ) );
+    mUsePolylineBox->setChecked( false );
+
 
     mUsePressureBox = new QCheckBox( tr( "Pressure" ) );
     mUsePressureBox->setToolTip( tr( "Size with pressure" ) );
@@ -106,7 +113,8 @@ void ToolOptionWidget::createUI()
     pLayout->addWidget( mBrushSpinBox, 8, 10, 1, 2);
     pLayout->addWidget( mFeatherSlider, 9, 0, 1, 2 );
     pLayout->addWidget( mFeatherSpinBox, 9, 10, 1, 2 );
-    pLayout->addWidget( mUseBezierBox, 10, 0, 1, 2 );
+    //pLayout->addWidget( mUseBezierBox, 10, 0, 1, 2 );
+    pLayout->addWidget( mUsePolylineBox, 10, 0, 1, 2 );
     pLayout->addWidget( mUsePressureBox, 11, 0, 1, 2 );
     pLayout->addWidget( mPreserveAlphaBox, 12, 0, 1, 2 );
     pLayout->addWidget( mUseFeatherBox, 13, 0, 1, 2 );
@@ -123,7 +131,8 @@ void ToolOptionWidget::makeConnectionToEditor( Editor* editor )
 {
     auto toolManager = editor->tools();
 
-    connect( mUseBezierBox, &QCheckBox::clicked, toolManager, &ToolManager::setBezier );
+    //connect( mUseBezierBox, &QCheckBox::clicked, toolManager, &ToolManager::setBezier );
+    connect( mUsePolylineBox, &QCheckBox::clicked, toolManager, &ToolManager::setPolyline);
     connect( mUsePressureBox, &QCheckBox::clicked, toolManager, &ToolManager::setPressure );
     connect( mMakeInvisibleBox, &QCheckBox::clicked, toolManager, &ToolManager::setInvisibility );
     connect( mPreserveAlphaBox, &QCheckBox::clicked, toolManager, &ToolManager::setPreserveAlpha );
@@ -221,7 +230,8 @@ void ToolOptionWidget::disableAllOptions()
     mFeatherSlider->hide();
     mFeatherSpinBox->hide();
     mUseFeatherBox->hide();
-    mUseBezierBox->hide();
+   // mUseBezierBox->hide();
+    mUsePolylineBox->hide();
     mUsePressureBox->hide();
     mMakeInvisibleBox->hide();
     mPreserveAlphaBox->hide();

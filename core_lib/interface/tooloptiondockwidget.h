@@ -38,7 +38,8 @@ private:
     void disableAllOptions();
     void createUI();
 
-    QCheckBox* mUseBezierBox     = nullptr;
+    //QCheckBox* mUseBezierBox     = nullptr;
+    QCheckBox* mUsePolylineBox   = nullptr;
     QCheckBox* mUsePressureBox   = nullptr;
     QCheckBox* mUseFeatherBox    = nullptr;
     QCheckBox* mMakeInvisibleBox = nullptr;

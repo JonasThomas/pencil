@@ -78,9 +78,11 @@ void PolylineTool::mousePressEvent( QMouseEvent *event )
     {
         if ( layer->type() == Layer::BITMAP || layer->type() == Layer::VECTOR )
         {
+
             if ( points.size() == 0 )
             {
                 mEditor->backup( tr( "Line" ) );
+
             }
 
             if ( layer->type() == Layer::VECTOR )
@@ -91,7 +93,7 @@ void PolylineTool::mousePressEvent( QMouseEvent *event )
                     mScribbleArea->toggleThinLines();
                 }
             }
-            points << getCurrentPoint();
+
             mScribbleArea->setAllDirty();
         }
     }
@@ -99,28 +101,32 @@ void PolylineTool::mousePressEvent( QMouseEvent *event )
 
 void PolylineTool::mouseReleaseEvent( QMouseEvent *event )
 {
-    Q_UNUSED( event );
+    //Q_UNUSED( event );
+    points << getCurrentPoint();
+    drawLines();
 }
 
 void PolylineTool::mouseMoveEvent( QMouseEvent *event )
 {
-    Q_UNUSED( event );
+    //Q_UNUSED( event );
     Layer* layer = mEditor->layers()->currentLayer();
 
     if ( layer->type() == Layer::BITMAP || layer->type() == Layer::VECTOR )
     {
-        mScribbleArea->drawPolyline( points, getCurrentPoint() );
+
+        drawLines();
+        //mScribbleArea->drawPolyline( points, getCurrentPoint() );
     }
 }
 
 void PolylineTool::mouseDoubleClickEvent( QMouseEvent *event )
 {
-    // XXX highres position ??
-    if ( BezierCurve::eLength( m_pStrokeManager->getLastPressPixel() - event->pos() ) < 2.0 )
-    {
-        mScribbleArea->endPolyline( points );
-        clear();
-    }
+//    // XXX highres position ??
+//    if ( BezierCurve::eLength( m_pStrokeManager->getLastPressPixel() - event->pos() ) < 2.0 )
+//    {
+//        mScribbleArea->endPolyline( points );
+//        clear();
+//    }
 }
 
 bool PolylineTool::keyPressEvent( QKeyEvent *event )
@@ -147,4 +153,13 @@ bool PolylineTool::keyPressEvent( QKeyEvent *event )
     }
 
     return false;
+}
+
+
+void PolylineTool::drawLines()
+{
+
+    mScribbleArea->drawPolyline( points, getCurrentPoint());
+
+
 }

@@ -15,7 +15,7 @@ PolyLine::PolyLine(QList<QPointF> pointList)
         pressureList << 0.5; // default pressure
     }
 
-    //createPolyline(pointList, pressureList);
+    createPolyline(pointList, pressureList);
 }
 
 PolyLine::PolyLine(QList<QPointF> pointList, QList<qreal> pressureList, double tol)
@@ -531,35 +531,35 @@ QPainterPath PolyLine::drawPath()
 //    return getPath().boundingRect();
 //}
 
-//void PolyLine::createCurve(QList<QPointF>& pointList, QList<qreal>& pressureList )
-//{
-//    int p = 0;
-//    int n = pointList.size();
-//    // generate the Bezier (cubic) curve from the simplified path and mouse pressure
-//    // first, empty everything
-//    //while (c1.size()>0) c1.removeAt(0);
-//    //while (c2.size()>0) c2.removeAt(0);
-//    while (vertex.size()>0) vertex.removeAt(0);
-//    while (selected.size()>0) selected.removeAt(0);
-//    while (pressure.size()>0) pressure.removeAt(0);
+void PolyLine::createPolyline(QList<QPointF>& pointList, QList<qreal>& pressureList )
+{
+    int p = 0;
+    int n = pointList.size();
+    // generate the Bezier (cubic) curve from the simplified path and mouse pressure
+    // first, empty everything
+    //while (c1.size()>0) c1.removeAt(0);
+    //while (c2.size()>0) c2.removeAt(0);
+    while (vertex.size()>0) vertex.removeAt(0);
+    while (selected.size()>0) selected.removeAt(0);
+    while (pressure.size()>0) pressure.removeAt(0);
 
-//    setOrigin( pointList.at(0) );
-//    selected.append(false);
-//    pressure.append(pressureList.at(0));
+    setOrigin( pointList.at(0) );
+    selected.append(false);
+    pressure.append(pressureList.at(0));
 
-//    for(p=1; p<n; p++)
-//    {
-//        //c1.append(pointList.at(p));
-//        //c2.append(pointList.at(p));
-//        vertex.append(pointList.at(p));
-//        pressure.append(pressureList.at(p));
-//        selected.append(false);
+    for(p=1; p<n; p++)
+    {
+        //c1.append(pointList.at(p));
+        //c2.append(pointList.at(p));
+        vertex.append(pointList.at(p));
+        pressure.append(pressureList.at(p));
+        selected.append(false);
 
-//    }
-//    smoothCurve();
-//    //colourNumber = 0;
-//    feather = 0;
-//}
+    }
+    //smoothCurve();
+    //colourNumber = 0;
+    feather = 0;
+}
 
 
 //void PolyLine::smoothCurve()

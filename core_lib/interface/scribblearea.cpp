@@ -1147,17 +1147,17 @@ void ScribbleArea::drawPolyline( QList<QPointF> points, QPointF endPoint )
                    Qt::RoundCap,
                    Qt::RoundJoin );
         QPainterPath tempPath;
-        if ( currentTool()->properties.polyline_state)
-        {
+       // if ( currentTool()->properties.polyline_state)
+       // {
             tempPath = PolyLine( points ).drawPath();
-        }
+        //}
 //        else
 //        {
 //            tempPath = PolyLine( points ).getStraightPath();
 //        }
         tempPath.lineTo( endPoint );
 
-        QRectF updateRect = mEditor->view()->mapCanvasToScreen( tempPath.boundingRect().toRect() ).adjusted( -10, -10, 10, 10 );
+        //QRectF updateRect = mEditor->vie-w()->mapCanvasToScreen( tempPath.boundingRect().toRect() ).adjusted( -10, -10, 10, 10 );
         if ( mEditor->layers()->currentLayer()->type() == Layer::VECTOR )
         {
             tempPath = mEditor->view()->mapCanvasToScreen( tempPath );
@@ -1174,8 +1174,14 @@ void ScribbleArea::drawPolyline( QList<QPointF> points, QPointF endPoint )
         mBufferImg->clear();
         mBufferImg->drawPath( tempPath, pen2, Qt::NoBrush, QPainter::CompositionMode_SourceOver, mPrefs->isOn( SETTING::ANTIALIAS ) );
 
-        update( updateRect.toRect() );
+        //update( updateRect.toRect() );
     }
+    else
+    {
+
+
+    }
+
 }
 
 void ScribbleArea::endPolyline( QList<QPointF> points )
@@ -1189,14 +1195,15 @@ void ScribbleArea::endPolyline( QList<QPointF> points )
 
     if ( layer->type() == Layer::VECTOR )
     {
-        BezierCurve curve = BezierCurve( points );
+
+        BezierCurve curve = BezierCurve( );
         if ( mMakeInvisible )
         {
-            curve.setWidth( 0 );
+            curve .setWidth( 0 );
         }
         else
         {
-            curve.setWidth( getTool( TT_POLYLINE )->properties.width );
+            curve .setWidth( getTool( TT_POLYLINE )->properties.width );
         }
         curve.setColourNumber( mEditor->color()->frontColorNumber() );
         curve.setVariableWidth( false );
