@@ -26,7 +26,7 @@ public:
     void setFeather( const qreal feather ) override;
 
 private:
-    void drawLines();
+    void drawLines(QList<QPointF>,QPointF);
     QList<QPointF> points;
 };
 

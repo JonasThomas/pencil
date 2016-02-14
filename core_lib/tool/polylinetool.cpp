@@ -81,7 +81,9 @@ void PolylineTool::mousePressEvent( QMouseEvent *event )
 
             if ( points.size() == 0 )
             {
-                mEditor->backup( tr( "Line" ) );
+                //mEditor->backup( tr( "Line" ) ); Don't understand this
+                // If points are empty we need to prime the pump here
+                points << getCurrentPoint();
 
             }
 
@@ -102,8 +104,8 @@ void PolylineTool::mousePressEvent( QMouseEvent *event )
 void PolylineTool::mouseReleaseEvent( QMouseEvent *event )
 {
     //Q_UNUSED( event );
-    points << getCurrentPoint();
-    drawLines();
+    points << getCurrentPoint();//We just added another point to the line
+    //the mouseMoveEvent will render it
 }
 
 void PolylineTool::mouseMoveEvent( QMouseEvent *event )
@@ -113,8 +115,14 @@ void PolylineTool::mouseMoveEvent( QMouseEvent *event )
 
     if ( layer->type() == Layer::BITMAP || layer->type() == Layer::VECTOR )
     {
+        if (points.count()>0) //we could be moving the mouse around and having clicked anything yet
+        {
+            drawLines(points, getCurrentPoint());
 
-        drawLines();
+
+
+
+        }
         //mScribbleArea->drawPolyline( points, getCurrentPoint() );
     }
 }
@@ -156,10 +164,11 @@ bool PolylineTool::keyPressEvent( QKeyEvent *event )
 }
 
 
-void PolylineTool::drawLines()
+void PolylineTool::drawLines(QList<QPointF> points,QPointF point)
 {
 
-    mScribbleArea->drawPolyline( points, getCurrentPoint());
+    mScribbleArea->drawPolyline( points, point);
+
 
 
 }
