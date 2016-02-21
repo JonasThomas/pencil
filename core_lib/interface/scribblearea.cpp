@@ -66,6 +66,7 @@ bool ScribbleArea::init()
     int curveSmoothingLevel = mPrefs->getInt(SETTING::CURVE_SMOOTHING);
     mCurveSmoothingLevel = curveSmoothingLevel / 20.0; // default value is 1.0
 
+    mQuickSizing = mPrefs->isOn( SETTING::QUICK_SIZING );
     mMakeInvisible = false;
     somethingSelected = false;
 
@@ -137,6 +138,8 @@ void ScribbleArea::settingUpdated(SETTING setting)
         break;
     case SETTING::GRID_SIZE:
         updateAllFrames();
+    case SETTING::QUICK_SIZING:
+        mQuickSizing = mPrefs->isOn( SETTING::QUICK_SIZING );
         break;
     default:
         break;
@@ -146,6 +149,7 @@ void ScribbleArea::settingUpdated(SETTING setting)
 
 void ScribbleArea::updateToolCursor()
 {
+    this->setFocus();
     setCursor( currentTool()->cursor() );
     updateAllFrames();
 }
@@ -251,9 +255,18 @@ void ScribbleArea::escape()
 
 void ScribbleArea::keyPressEvent( QKeyEvent *event )
 {
+    // Don't handle this event on auto repeat
+    //
+    if (event->isAutoRepeat()) {
+        return;
+    }
+
     mKeyboardInUse = true;
 
     if ( mMouseInUse ){ return; } // prevents shortcuts calls while drawing
+
+    if ( instantTool ){ return; } // prevents shortcuts calls while using instant tool
+
 
     if ( currentTool()->keyPressEvent( event ) )
     {
@@ -264,11 +277,7 @@ void ScribbleArea::keyPressEvent( QKeyEvent *event )
     // --- fixed control key shortcuts ---
     if ( event->modifiers() == ( Qt::ControlModifier | Qt::ShiftModifier ) )
     {
-        qreal width = currentTool()->properties.width;
-        qreal feather = currentTool()->properties.feather;
         setTemporaryTool( ERASER );
-        mEditor->tools()->setWidth( width + ( 200 - width ) / 41 ); // minimum size: 0.2 + 4.8 = 5 units. maximum size 200 + 0.
-        mEditor->tools()->setFeather( feather ); //anticipates future implementation of feather (not used yet).
         return;
     }
 
@@ -364,8 +373,16 @@ void ScribbleArea::keyPressEvent( QKeyEvent *event )
 
 void ScribbleArea::keyReleaseEvent( QKeyEvent *event )
 {
+    // Don't handle this event on auto repeat
+    //
+    if (event->isAutoRepeat()) {
+        return;
+    }
+
     mKeyboardInUse = false;
-    if ( mMouseInUse ) { return; }
+
+    if ( mMouseInUse  ) { return; }
+
     if ( instantTool ) // temporary tool
     {
         currentTool()->keyReleaseEvent( event );
@@ -479,7 +496,7 @@ void ScribbleArea::mousePressEvent( QMouseEvent* event )
     }
 
     // ----- assisted tool adjusment -- todo: simplify this
-    if ( event->button() == Qt::LeftButton )
+    if ( event->button() == Qt::LeftButton && mQuickSizing)
     {
         if ( ( event->modifiers() == Qt::ShiftModifier ) && ( currentTool()->properties.width > -1 ) )
         {
@@ -662,7 +679,7 @@ void ScribbleArea::resizeEvent( QResizeEvent *event )
 /************************************************************************************/
 // paint methods
 
-void ScribbleArea::paintBitmapBuffer()
+void ScribbleArea::paintBitmapBuffer( )
 {
     Layer* layer = mEditor->layers()->currentLayer();
 
@@ -698,6 +715,51 @@ void ScribbleArea::paintBitmapBuffer()
     qCDebug( mLog ) << "Paste Rect" << mBufferImg->bounds();
 
     QRect rect = mEditor->view()->getView().mapRect( mBufferImg->bounds() );
+
+    // Clear the buffer
+    mBufferImg->clear();
+
+    layer->setModified( mEditor->currentFrame(), true );
+    emit modification();
+
+    QPixmapCache::remove( "frame" + QString::number( mEditor->currentFrame() ) );
+    drawCanvas( mEditor->currentFrame(), rect.adjusted( -1, -1, 1, 1 ) );
+    update( rect );
+}
+
+void ScribbleArea::paintBitmapBufferRect( QRect rect )
+{
+    Layer* layer = mEditor->layers()->currentLayer();
+
+    // ---- checks ------
+    Q_ASSERT( layer );
+    if ( layer == NULL ) { return; } // TODO: remove in future.
+
+    BitmapImage *targetImage = ( ( LayerBitmap * )layer )->getLastBitmapImageAtFrame( mEditor->currentFrame(), 0 );
+    // Clear the temporary pixel path
+    if ( targetImage != NULL )
+    {
+        QPainter::CompositionMode cm = QPainter::CompositionMode_SourceOver;
+        switch ( currentTool()->type() )
+        {
+            case ERASER:
+                cm = QPainter::CompositionMode_DestinationOut;
+                break;
+            case BRUSH:
+            case PEN:
+            case PENCIL:
+                if ( getTool( currentTool()->type() )->properties.preserveAlpha )
+                {
+                    cm = QPainter::CompositionMode_SourceAtop;
+                }
+                break;
+            default: //nothing
+                break;
+        }
+        targetImage->paste( mBufferImg, cm );
+    }
+
+    qCDebug( mLog ) << "Paste Rect" << mBufferImg->bounds();
 
     // Clear the buffer
     mBufferImg->clear();
@@ -935,23 +997,6 @@ void ScribbleArea::paintEvent( QPaintEvent* event )
                 }
             }
         }
-    }
-
-    // clips to the frame of the camera
-    if ( mPrefs->isOn( SETTING::CAMERABORDER ) )
-    {
-        QRect rect = ( ( LayerCamera * )mEditor->object()->getLayer(mEditor->layers()->getLastCameraLayer()) )->getViewRect();
-        rect.translate( width() / 2, height() / 2 );
-        painter.setWorldMatrixEnabled( false );
-        painter.setPen( Qt::NoPen );
-        painter.setBrush( QColor( 0, 0, 0, 160 ) );
-        painter.drawRect( QRect( 0, 0, width(), ( height() - rect.height() ) / 2 ) );
-        painter.drawRect( QRect( 0, rect.bottom(), width(), ( height() - rect.height() ) / 2 ) );
-        painter.drawRect( QRect( 0, rect.top(), ( width() - rect.width() ) / 2, rect.height() - 1 ) );
-        painter.drawRect( QRect( ( width() + rect.width() ) / 2, rect.top(), (( width() - rect.width() ) / 2) + 1, rect.height() - 1 ) );
-        painter.setPen( Qt::black );
-        painter.setBrush( Qt::NoBrush );
-        painter.drawRect( QRect(rect.x(), rect.y(), rect.width() - 1, rect.height() - 1) );
     }
 
     // outlines the frame of the viewport
@@ -1532,11 +1577,6 @@ void ScribbleArea::toggleMultiLayerOnionSkin( bool checked )
     emit multiLayerOnionSkinChanged( mMultiLayerOnionSkin );
 }
 
-void ScribbleArea::toggleCameraBorder( bool checked )
-{
-    setEffect( SETTING::CAMERABORDER, checked );
-}
-
 void ScribbleArea::toggleOnionBlue( bool checked )
 {
     setEffect( SETTING::ONION_BLUE, checked );
@@ -1622,9 +1662,15 @@ void ScribbleArea::setCurrentTool( ToolType eToolMode )
 
 void ScribbleArea::setTemporaryTool( ToolType eToolMode )
 {
-    instantTool = true; // used to return to previous tool when finished (keyRelease).
-    mPrevTemporalToolType = currentTool()->type();
-    editor()->tools()->setCurrentTool( eToolMode );
+    // Only switch to remporary tool if not already in this state
+    // and temporary tool is not already the current tool.
+    //
+    if (!instantTool && currentTool()->type() != eToolMode) {
+
+        instantTool = true; // used to return to previous tool when finished (keyRelease).
+        mPrevTemporalToolType = currentTool()->type();
+        editor()->tools()->setCurrentTool( eToolMode );
+    }
 }
 
 void ScribbleArea::deleteSelection()
