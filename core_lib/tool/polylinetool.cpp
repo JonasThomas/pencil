@@ -68,8 +68,8 @@ QCursor PolylineTool::cursor() //Not working this one, any guru to fix it?
 void PolylineTool::clear()
 {
     points.clear();
-}
-
+}+
++
 void PolylineTool::mousePressEvent( QMouseEvent *event )
 {
     Layer* layer = mEditor->layers()->currentLayer();
@@ -78,6 +78,7 @@ void PolylineTool::mousePressEvent( QMouseEvent *event )
     {
         if ( layer->type() == Layer::BITMAP || layer->type() == Layer::VECTOR )
         {
+
 
             if ( points.size() == 0 )
             {
